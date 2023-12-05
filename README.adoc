@@ -1,4 +1,4 @@
-# Infra as Code on Oracle Cloud Infra
+# Infra as Code on Oracle Cloud (OCI)
 
 == Summary
 Deploy a minimalistic landing zone and foundation for containerized application deployment on Oracle Cloud Infrastructure (OCI) levearging the following cloud capabilities:
