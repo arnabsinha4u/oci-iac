@@ -1,0 +1,69 @@
+# Infra as Code on Oracle Cloud Infra
+
+== Summary
+Deploy a minimalistic landing zone and foundation for containerized application deployment on Oracle Cloud Infrastructure (OCI) levearging the following cloud capabilities:
+
+* Compartment
+* Vault
+* Networking
+* Kubernetes
+* Database
+* Bastion
+* OCI DevOps
+
+== What gets up and running and understanding the setup
+One will have a compartment created in a region of choice, with VCN and 3 tiers of subnets with security and route rules, OKE cluster with access to Database subnet with MySQL DB. A vault with key and encrypted credentials to access the database. A bastion setup to access the database. The OKE cluster is having Public Kubernetes API Endpoint, Private Worker Nodes, and Public Load Balancers.
+
+The modules directory has the modules for:
+
+* Compartment - Root and sub-compartments
+* Vault - Vault, Key Management & Secret
+* Networking - VCN, Internet, NAT and Core Gateways, Subnets, Ingress/Egress Rules, Security lists and Route Tables
+* OKE - Kubernetes Cluster
+* Database - MySQL Database
+* Bastion - Bastion setup for database access
+* DevOps - Notification topic, Project, Artifact Repository, Container Registry and Code respository
+
+config.tf consists of terraform and providers configuration. If not using the OCI Shell, please configure your OCI access key in this file or use TF_VARS.
+
+terraform.tfvars consists the values to the configurations to be done. As a best practise, it can be moved to a different vars file as well.
+
+variables.tf, main.tf and outputs.tf are self explanatory :)
+
+== As I say, Design is Holy
+
+
+== How to deploy
+Login to your oracle cloud shell and clone the repository. If not using the cloud shell, modify the config.tf to include your OCI key and then execute the below:
+[, terraform]
+----
+terraform init
+terraform plan
+terraform apply
+----
+
+== Test the setup
+Once, everything is deployed, one can test the deployment with the scripts in under hello-world-k8s directory.
+Execute to deploy Ingress Nginx, Hello World workload and configure the ingress controller.
+
+Pick the external IP from the output and curl it to get the response from the pods OR try it in your favourite browser.
+[, bash]
+----
+./hello-world-k8s/deploy-e2e-hello-world.sh
+----
+
+Once your tests are done, time for cleanup! Execute the below script
+[, bash]
+----
+./hello-world-k8s/remove-e2e-hello-world.sh
+----
+
+== Why not use the OCI Landing Zone already open-sourced
+OCI Terraform team has done a great job in creating reference architectures for various patterns of Landing Zones in OCI but they are all for large scale, enterprise wide implementations. If one is interested in deploying in a limited scale, I found the engineering effort to be comparatively high to tailor it down and also in the in future from a maintenance and operations standpoint. You might want to deploy in limited scale when your contractual construct or service models with which you serve your target customer varies and does not allow you the full play but you still want to have some standards with the right industry practises and secure.
+
+== References
+Well, since I was getting acquainted to Oracle Cloud Infrastructure (OCI), found some good resources online:
+
+https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengnetworkconfigexample.htm#example-oci-cni-publick8sapi_privateworkers_publiclb[Example of Public Kubernetes API Endpoint, Private Worker Nodes, and Public Load Balancers with OCI CNI]
+
+https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengsettingupingresscontroller.htm[Setting Up an Nginx Ingress Controller on a Cluster]
