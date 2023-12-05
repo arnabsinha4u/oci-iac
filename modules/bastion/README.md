@@ -1,1 +1,0 @@
-Values for subnet id is hardcoded and will be different for every env. it has to be updated manually.

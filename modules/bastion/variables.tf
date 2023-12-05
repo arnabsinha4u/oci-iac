@@ -14,7 +14,6 @@ variable "bastion_conf" {
   }))
 }
 
-
 variable "network_details" {
   description = "Input network details"
   default     = {}

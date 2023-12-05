@@ -1,11 +1,3 @@
-/*
-locals {
-  oke_api_disp_name   = [for name_check in data.oci_core_subnets.get_subnets.subnets[*].display_name : name_check if length(regexall(".*okeapi", name_check)) > 0]
-  oke_srvlb_disp_name = [for name_check in data.oci_core_subnets.get_subnets.subnets[*].display_name : name_check if length(regexall(".*okesrvlb", name_check)) > 0]
-  oke_node_disp_name  = [for name_check in data.oci_core_subnets.get_subnets.subnets[*].display_name : name_check if length(regexall(".*okenode", name_check)) > 0]
-}
-*/
-
 resource "oci_containerengine_cluster" "oke_cluster" {
   compartment_id = var.non_root_compartment_id
   vcn_id         = var.vcn_id
