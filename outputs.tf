@@ -23,7 +23,6 @@ output "subnet_keys_names_values_ids" {
   sensitive   = false
 }
 
-
 output "igw_details" {
   value       = module.networking.igw_details
   description = "IGW Details"
@@ -47,7 +46,6 @@ output "route_table_details" {
   description = "Route Table details"
   sensitive   = false
 }
-
 
 output "vault_details" {
   value = module.vault.vault_details

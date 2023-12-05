@@ -54,27 +54,6 @@ resource "oci_core_service_gateway" "service_gateway" {
   vcn_id = oci_core_vcn.vcn.id
 }
 
-/*New route table creation being introduced
-#Keep Default and other route tables separate since the tagging to subnets are different
-resource "oci_core_route_table" "route_table" {
-  compartment_id = var.non_root_compartment_id
-  display_name   = "Core Route Table for OKE OCI services"
-  route_rules {
-    description       = "Traffic to/from internet"
-    destination       = "0.0.0.0/0"
-    destination_type  = "CIDR_BLOCK"
-    network_entity_id = oci_core_nat_gateway.nat_gateway.id
-  }
-  route_rules {
-    description       = "Traffic to FRA OCI services"
-    destination       = data.oci_core_services.service_gateway_services.services.0.cidr_block # ID:0 is All FRA Services In Oracle Services Network
-    destination_type  = "SERVICE_CIDR_BLOCK"
-    network_entity_id = oci_core_service_gateway.service_gateway.id
-  }
-  vcn_id = oci_core_vcn.vcn.id
-}
-*/
-
 #Creating/Updating default route table as EMPTY
 resource "oci_core_default_route_table" "default_route_table" {
   display_name               = "DEFAULT Core Route Table"
@@ -144,97 +123,12 @@ resource "oci_core_route_table" "route_table" {
   }
 }
 
-/* COMMENTED OUT FOR TESTING but TESTING to WORK in the past
-#Keep Default and other route tables separate since the tagging to subnets are different
-resource "oci_core_default_route_table" "default_route_table" {
-  display_name = "DEFAULT Core Route Table"
-  route_rules {
-    description       = "Traffic to/from internet"
-    destination       = "0.0.0.0/0"
-    destination_type  = "CIDR_BLOCK"
-    network_entity_id = oci_core_internet_gateway.internet_gateway.id
-  }
-  manage_default_resource_id = oci_core_vcn.vcn.default_route_table_id
-}
-*/
-
-/* COMMENTED OUT FOR TESTING but TESTING to WORK in the past
-#Re-writing default security list. Make amendments here directly (if needed)
-resource "oci_core_default_security_list" "default_security_list" {
-  compartment_id             = var.non_root_compartment_id
-  display_name               = "DEFAULT Core security_list"
-  manage_default_resource_id = oci_core_vcn.vcn.default_security_list_id
-  ingress_security_rules {
-    protocol  = "1"
-    stateless = false
-    source    = "0.0.0.0/0"
-    icmp_options {
-      type = 3
-      code = 4
-    }
-  }
-  ingress_security_rules {
-    protocol  = "1"
-    stateless = false
-    source    = "10.1.0.0/18"
-    icmp_options {
-      type = 3
-    }
-  }
-  ingress_security_rules {
-    protocol  = "6"
-    stateless = false
-    source    = "0.0.0.0/0"
-    tcp_options {
-      max = 22
-      min = 22
-    }
-  }
-  egress_security_rules {
-    protocol    = "all"
-    stateless   = false
-    destination = "0.0.0.0/0"
-  }
-}
-*/
-
 #Creating/Updating default security list as EMPTY
 resource "oci_core_default_security_list" "default_security_list" {
   compartment_id             = var.non_root_compartment_id
   display_name               = "DEFAULT Core security_list"
   manage_default_resource_id = oci_core_vcn.vcn.default_security_list_id
 }
-
-/*working but new trial with subnet
-#Subnet and Security list
-resource "oci_core_subnet" "subnet_network" {
-  #Required
-  compartment_id = var.non_root_compartment_id
-  vcn_id         = oci_core_vcn.vcn.id
-
-  for_each                   = var.subnet_data
-  cidr_block                 = each.value.subnet_cidr_blocks
-  display_name               = each.value.subnet_display_name
-  dns_label                  = each.value.subnet_dns_label
-  prohibit_internet_ingress  = each.value.subnet_prohibit_internet_ingress
-  prohibit_public_ip_on_vnic = each.value.subnet_prohibit_public_ip_on_vnic
-  security_list_ids          = [for sec_key, sec_val in each.value.subnet_security_list : oci_core_security_list.subnet_security[sec_key].id]
-  route_table_id = (
-    (can(
-      regex(".*okeNOTAPPLICABLE.*", each.value.subnet_display_name) # okeapi to be put in if private nw
-      )
-      || (can(
-        regex(".*okenode.*", each.value.subnet_display_name)
-        )
-      )
-    ) ?
-    data.oci_core_route_tables.data_route_tables.route_tables[0].id :
-    data.oci_core_route_tables.data_route_tables.route_tables[1].id
-  )
-  depends_on = [oci_core_default_route_table.default_route_table,
-  oci_core_route_table.route_table]
-}
-*/
 
 resource "oci_core_subnet" "subnet_network" {
   #Required
