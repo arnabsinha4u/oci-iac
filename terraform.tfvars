@@ -24,7 +24,7 @@ vault_secrets_config = {
     secret_name            = "mysql_db_password"
     secret_content_name    = "mysql_db_password"
     secret_content_type    = "BASE64"
-    secret_content_content = "QWRtaW5BUFAxIQ=="
+    secret_content_content = "QWRtaW5BUFAxIQ==" # Encoded base64 password included here so that the solution works easily but should never be committed to a source control.
     enc_key                = "master_encryption_key"
   },
 }
