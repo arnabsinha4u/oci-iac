@@ -1,0 +1,1 @@
+A simple database configuration. This can be extended with additional configurations and flags for production grade with backup settings etc.
