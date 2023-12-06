@@ -1,0 +1,6 @@
+OKE Cluster with flexibility of nodes and extendable with additional configurations.
+
+[CAUTION]
+====
+. Availability zones as static to 3 with zones mentioned. Needs to be parameterized
+====

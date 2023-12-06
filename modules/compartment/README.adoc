@@ -1,0 +1,1 @@
+A single compartment creation/removal. This can be enhanced to create/remove nested compartments. Force deletion of the comparment has been kept off. When destroying, OCI will show that compartment is destroyed but in reality its not. Its a failsafe by Oracle.

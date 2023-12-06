@@ -11,6 +11,9 @@ Deploy a minimalistic landing zone and foundation for containerized application 
 * Bastion
 * OCI DevOps
 
+== Design first!
+image::OCI_Infra_arch_minimal.jpg[Minimalistic Landing Zone]
+
 == What gets up and running and understanding the setup
 One will have a compartment created in a region of choice, with VCN and 3 tiers of subnets with security and route rules, OKE cluster with access to Database subnet with MySQL DB. A vault with key and encrypted credentials to access the database. A bastion setup to access the database. The OKE cluster is having Public Kubernetes API Endpoint, Private Worker Nodes, and Public Load Balancers.
 
@@ -27,9 +30,6 @@ config.tf:: consists of terraform and providers configuration. If not using the 
 terraform.tfvars:: consists the values to the configurations to be done. As a best practise, it can be moved to a different vars file as well.
 variables.tf, main.tf and outputs.tf:: are self explanatory :)
 
-== As I say, Design is Holy
-image::OCI_Infra_arch_minimal.jpg[Minimalistic Landing Zone]
-
 == How to deploy
 Login to your oracle cloud shell and clone the repository. If not using the cloud shell, modify the config.tf to include your OCI key and then execute the below:
 [, terraform]
@@ -40,10 +40,10 @@ terraform apply
 ----
 
 == Test the setup
-Once, everything is deployed, one can test the deployment with the scripts in under hello-world-k8s directory.
-Execute to deploy Ingress Nginx, Hello World workload and configure the ingress controller.
+Once, everything is deployed, one can test the deployment with the scripts in  hello-world-k8s directory.
+Execute to deploy Ingress controller (Nginx in this case), Hello World workload and configure the ingress controller.
 
-Pick the external IP from the output and curl it to get the response from the pods OR try it in your favourite browser.
+Pick the external IP from the output and curl it to get the response from the pods OR try it in your favourite web browser.
 [, bash]
 ----
 ./hello-world-k8s/deploy-e2e-hello-world.sh
@@ -65,8 +65,8 @@ If you have got a suggestion, add it here via a MR or even better, make the chan
 * [ ] Variable for availability_domain in OKE module
 * [ ] Simplify oke_node_pool_image_id for OKE Nodes
 
-== Why I did not use the OCI Landing Zone already open-sourced
-OCI Terraform team has done a great job in creating reference architectures for various patterns of Landing Zones in OCI but they are all for large scale, enterprise wide implementations. If one is interested in deploying in a limited scale, I found the engineering effort to be comparatively high to tailor it down and also in the in future from a maintenance and operations standpoint. You might want to deploy in limited scale when your contractual construct or service models with which you serve your target customer varies and does not allow you the full play but you still want to have some standards with the right industry practises and secure.
+== Why I did not use the OCI Landing Zone already open-sourced as-is
+OCI Terraform team has done a great job in creating reference architectures for various patterns of Landing Zones in OCI but they are all for large scale, enterprise wide implementations and landing zones should be like that indeed. If one is interested in deploying in a limited scale, I found the engineering effort to be comparatively high to tailor it down and also in the future from a maintenance and operations standpoint. You might want to deploy in limited scale when your contractual construct or service models with which you serve your target customer varies and does not allow you the full play but you still want to have some standards with the right industry practises and secure.
 
 == References
 Well, since I was getting acquainted to Oracle Cloud Infrastructure (OCI), found some good resources online:
@@ -76,3 +76,9 @@ https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengnetworkconfig
 https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengsettingupingresscontroller.htm[Setting Up an Nginx Ingress Controller on a Cluster]
 
 https://developer.oracle.com/learn/technical-articles/oci-shell-bastion-mysql[How to use the OCI Cloud Shell & Bastion with MySQL Database Service]
+
+https://github.com/oracle-quickstart/oci-cis-landingzone-quickstart[CIS OCI Landing Zone Quick Start Template]
+
+https://docs.oracle.com/en/solutions/cis-oci-benchmark/index.html#GUID-89CA48AA-73E1-4992-A43F-CA5FA5CE21CD[Secure landing zone that meets the CIS Foundations Benchmark for Oracle Cloud]
+
+https://www.oracle.com/cloud/cloud-adoption-framework/[Oracle CAF - Oracle Cloud Adoption Framework]

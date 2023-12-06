@@ -1,0 +1,1 @@
+A bastion using the bastion service of OCI. This can be used to access Database in the private network and OKE worker nodes in the private network. If any other services are in the private network, they can also be accessed through this bastion by creating respective sessions against this bastion.
